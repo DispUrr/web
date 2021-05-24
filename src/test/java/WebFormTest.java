@@ -1,14 +1,6 @@
-import com.codeborne.selenide.Condition;
+import com.codeborne.selenide.SelenideElement;
 import org.junit.jupiter.api.*;
-import org.openqa.selenium.By;
-import org.openqa.selenium.WebDriver;
-import org.openqa.selenium.WebElement;
-import org.openqa.selenium.chrome.ChromeDriver;
 
-import javax.swing.*;
-import java.util.List;
-
-import static com.codeborne.selenide.Condition.cssValue;
 import static com.codeborne.selenide.Condition.exactText;
 import static com.codeborne.selenide.Selenide.$;
 import static com.codeborne.selenide.Selenide.open;
@@ -16,9 +8,13 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 
 class WebFormTest {
 
+    @BeforeEach
+    void testInit() {
+        open("http://localhost:9999");
+    }
+
     @Test
     void shouldTestWithCorrectForm() {
-        open("http://localhost:9999");
         $("[data-test-id=name] input").setValue("Михаил Салтыков-Щедрин");
         $("[data-test-id=phone] input").setValue("+79513574532");
         $("[data-test-id=agreement]").click();
@@ -28,7 +24,6 @@ class WebFormTest {
 
     @Test
     void shouldTestWithIncorrectName() {
-        open("http://localhost:9999");
         $("[data-test-id=name] input").setValue("Mikhail Petrov");
         $("[data-test-id=phone] input").setValue("+79513574532");
         $("[data-test-id=agreement]").click();
@@ -38,7 +33,6 @@ class WebFormTest {
 
     @Test
     void shouldTestWithIncorrectPhone() {
-        open("http://localhost:9999");
         $("[data-test-id=name] input").setValue("Михаил Петров");
         $("[data-test-id=phone] input").setValue("+795135745");
         $("[data-test-id=agreement]").click();
@@ -48,7 +42,6 @@ class WebFormTest {
 
     @Test
     void shouldTestWithEmptyName() {
-        open("http://localhost:9999");
         $("[data-test-id=phone] input").setValue("+79513576265");
         $("[data-test-id=agreement]").click();
         $(".button__content").click();
@@ -57,28 +50,25 @@ class WebFormTest {
 
     @Test
     void shouldTestWithEmptyPhone() {
-        open("http://localhost:9999");
         $("[data-test-id=name] input").setValue("Михаил Петров");
         $("[data-test-id=agreement]").click();
         $(".button__content").click();
-        $("[data-test-id=phone].input_invalid .input__sub").shouldHave(exactText("Поле обязательно для заполнения"));
+        $(".input_invalid .input__sub").shouldHave(exactText("Поле обязательно для заполнения"));
     }
 
     @Test
     void shouldTestWithEmptyNameAndPhone() {
-        open("http://localhost:9999");
         $("[data-test-id=agreement]").click();
         $(".button__content").click();
-        $("[data-test-id=name].input_invalid .input__sub").shouldHave(exactText("Поле обязательно для заполнения"));
+        $(".input_invalid .input__sub").shouldHave(exactText("Поле обязательно для заполнения"));
     }
 
     @Test
     void shouldTestWithoutAgreement() {
-        open("http://localhost:9999/");
-        $("[data-test-id=name] input").setValue("Макс Фрай");
-        $("[data-test-id='phone'] input").setValue("+79513576525");
-        $(".button__content").click();
-        $("[data-test-id=agreement].input_invalid .checkbox__text").shouldHave(exactText("Я соглашаюсь с условиями обработки и использования моих персональных данных и разрешаю сделать запрос в бюро кредитных историй"));
-    }
+            $("[data-test-id=name] input").setValue("Макс Фрай");
+            $("[data-test-id='phone'] input").setValue("+79513576525");
+            $(".button__content").click();
+        boolean exists = $("[data-test-id=agreement].input_invalid .checkbox__text").exists();
+        }
 
 }
